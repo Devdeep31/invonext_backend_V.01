@@ -5,18 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.billingapplication.model.customer;
 import com.billingapplication.service.CustomerService;
 
 @RestController
+@CrossOrigin(value = "*")
+@RequestMapping("api/customer")
+
 public class CustomerController {
 
     @Autowired
@@ -43,7 +40,7 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
-    @GetMapping("/customer/{customerid}")
+    @GetMapping("/{customerid}")
     public ResponseEntity<customer> findCustomerByCustomerId(@PathVariable String customerid) {
         customer customer = service.getCustomerById(customerid);
         if (customer != null) {

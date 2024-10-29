@@ -30,12 +30,17 @@ public class RegistrationService {
 
     // Create new registration and save user
     public Registration registerUser(Registration registration) {
+
+        String pass = passwordEncoder.encode(registration.getPassword());
+        registration.setPassword(pass);
         Registration savedRegistration = registrationRepo.save(registration);
 
         User newUser = new User();
         newUser.setUsername(savedRegistration.getUsername());
         newUser.setEmail(savedRegistration.getEmail());
-        newUser.setPassword(passwordEncoder.encode(savedRegistration.getPassword())); // Encode the password
+        newUser.setPassword(pass); // Encode the password
+
+
 
         Role role = roleRepo.findByName(savedRegistration.getRole());
         newUser.setRole(role); // Set the user's role from the fetched Role

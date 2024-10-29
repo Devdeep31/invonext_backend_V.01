@@ -1,10 +1,7 @@
 package com.billingapplication.model;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.Random;
@@ -16,6 +13,7 @@ import com.billingapplication.repo.PaymentRepo;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class Payment {
     
     @Id
@@ -194,10 +192,7 @@ public class Payment {
 				+ hashCode() + ", toString()=" + super.toString() + "]";
 	}
 
-	public Payment() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
     
     
 }

@@ -10,6 +10,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CashbookService {
 
@@ -19,59 +22,59 @@ public class CashbookService {
     @Autowired
     private UserRepo userRepository;
 
-    private MasterBalance masterBalance = new MasterBalance(0.0); 
-
-    // Method to generate a random 6-digit code
     private String generate6DigitCode() {
+
         return String.format("%06d", (int) (Math.random() * 1000000));
     }
 
-    @Transactional
-    public Cashbook createCashbookEntry(Cashbook cashbook) {
-        User user = userRepository.findByEmail(cashbook.getUserEmail());
-        if (user == null) {
-            throw new IllegalArgumentException("User with email " + cashbook.getUserEmail() + " does not exist.");
+    public Cashbook savecb(Cashbook cb) {
+
+        if (cb.getCashbook_id() == null || cb.getCashbook_id().isEmpty()) {
+            cb.setCashbook_id(generate6DigitCode());
         }
-
-        // Generate a unique 6-digit code
-        String uniqueCode = generate6DigitCode();
-        cashbook.setCode(uniqueCode); // Assuming Cashbook has a setCode method
-
-        Cashbook savedEntry = cashbookRepository.save(cashbook);
-
-        cashbook.adjustBalance(masterBalance);
-
-        return savedEntry;
+        return cashbookRepository.save(cb);
     }
 
-    public Cashbook updateCashbookEntry(String cashbookId, Cashbook cashbookDetails) {
-        Cashbook existingCashbook = cashbookRepository.findById(cashbookId)
-                .orElseThrow(() -> new IllegalArgumentException("Cashbook entry with ID " + cashbookId + " does not exist."));
-
-        User user = userRepository.findByEmail(cashbookDetails.getUserEmail());
-        if (user == null) {
-            throw new IllegalArgumentException("User with email " + cashbookDetails.getUserEmail() + " does not exist.");
+    public List<Cashbook> saveallcb(List<Cashbook> cbList) {
+        for (Cashbook cb : cbList) {
+            if (cb.getCashbook_id() == null || cb.getCashbook_id().isEmpty()) {
+                cb.setCashbook_id(generate6DigitCode());
+            }
         }
-
-        existingCashbook.setName(cashbookDetails.getName());
-        existingCashbook.setAmount(cashbookDetails.getAmount());
-        existingCashbook.setDescription(cashbookDetails.getDescription());
-        existingCashbook.setDate(cashbookDetails.getDate());
-        existingCashbook.setInOut(cashbookDetails.getInOut());
-        existingCashbook.setUserEmail(cashbookDetails.getUserEmail());
-
-        return cashbookRepository.save(existingCashbook);
+        return cashbookRepository.saveAll(cbList);
     }
 
-    public void deleteCashbookEntry(String cashbookId) {
-        if (!cashbookRepository.existsById(cashbookId)) {
-            throw new IllegalArgumentException("Cashbook entry with ID " + cashbookId + " does not exist.");
-        }
 
-        cashbookRepository.deleteById(cashbookId);
+    public List<Cashbook> getrecords() {
+        return cashbookRepository.findAll();
     }
 
-    public double getMasterBalance() {
-        return masterBalance.getBalance();
+
+    public Optional<Cashbook> getcashById(String cashbook_id) {
+        return cashbookRepository.findById(cashbook_id);
+    }
+
+
+    public String deletecash(String cashbook_id) {
+        cashbookRepository.deleteById(cashbook_id);
+        return "removed";
+    }
+
+
+    public Cashbook updateCash(Cashbook cb) {
+        if (cb.getCashbook_id() == null || cb.getCashbook_id().isEmpty()) {
+            cb.setCashbook_id(generate6DigitCode());
+        }
+        Optional<Cashbook> editRec = cashbookRepository.findById(cb.getCashbook_id());
+        if (editRec.isPresent()) {
+            Cashbook existingCb = editRec.get();
+            existingCb.setName(cb.getName());
+            existingCb.setAmount(cb.getAmount());
+            existingCb.setDescription(cb.getDescription());
+            existingCb.setDate(cb.getDate());
+            existingCb.setEntry_mode(cb.getEntry_mode());
+            return cashbookRepository.save(existingCb);
+        }
+        return null;
     }
 }

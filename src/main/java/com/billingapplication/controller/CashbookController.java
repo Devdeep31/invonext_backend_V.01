@@ -3,46 +3,66 @@ package com.billingapplication.controller;
 import com.billingapplication.model.Cashbook;
 import com.billingapplication.service.CashbookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cashbook")
 public class CashbookController {
 
     @Autowired
-    private CashbookService cashbookService;
+    private CashbookService service;
 
-    @PostMapping
-    public ResponseEntity<Cashbook> createCashbookEntry(@RequestBody Cashbook cashbook) {
-        Cashbook createdEntry = cashbookService.createCashbookEntry(cashbook);
-        return ResponseEntity.ok(createdEntry);
+    @PostMapping("/add")
+    public ResponseEntity<Cashbook> addCashbook(@RequestBody Cashbook cashbook) {
+        Cashbook savedCashbook = service.savecb(cashbook);
+        return new ResponseEntity<>(savedCashbook, HttpStatus.CREATED);
     }
 
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<Cashbook> updateCashbookEntry(@PathVariable("id") String cashbookId, @RequestBody Cashbook cashbookDetails) {
-        Cashbook updatedEntry = cashbookService.updateCashbookEntry(cashbookId, cashbookDetails);
-        return ResponseEntity.ok(updatedEntry);
+    @PostMapping("/addall")
+    public ResponseEntity<List<Cashbook>> addMultipleCashbooks(@RequestBody List<Cashbook> cashbooks) {
+        List<Cashbook> savedCashbooks = service.saveallcb(cashbooks);
+        return new ResponseEntity<>(savedCashbooks, HttpStatus.CREATED);
     }
 
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCashbookEntry(@PathVariable("id") String cashbookId) {
-        cashbookService.deleteCashbookEntry(cashbookId);
-        return ResponseEntity.noContent().build(); // Return 204 No Content
+    @GetMapping("/cashbooks")
+    public ResponseEntity<List<Cashbook>> findAllCashbooks() {
+        List<Cashbook> cashbooks = service.getrecords();
+        if (cashbooks.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(cashbooks, HttpStatus.OK);
     }
 
-   
-    @GetMapping("/balance")
-    public ResponseEntity<Double> getMasterBalance() {
-        double balance = cashbookService.getMasterBalance();
-        return ResponseEntity.ok(balance);
+    @GetMapping("/{cashbook_id}")
+    public ResponseEntity<Cashbook> findCashbookById(@PathVariable String cashbook_id) {
+        Optional<Cashbook> cashbook = service.getcashById(cashbook_id);
+        if (cashbook.isPresent()) {
+            return new ResponseEntity<>(cashbook.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @PutMapping("/update")
+    public ResponseEntity<Cashbook> updateCashbook(@RequestBody Cashbook cashbook) {
+        Cashbook updatedCashbook = service.updateCash(cashbook);
+        if (updatedCashbook != null) {
+            return new ResponseEntity<>(updatedCashbook, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/delete/{cashbook_id}")
+    public ResponseEntity<String> deleteCashbook(@PathVariable String cashbook_id) {
+        try {
+            String result = service.deletecash(cashbook_id);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

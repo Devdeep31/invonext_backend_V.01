@@ -7,16 +7,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.billingapplication.model.JwtRequest;
 import com.billingapplication.model.JwtResponse;
 import com.billingapplication.security.JwtTokenUtil;
 
 @RestController
+@CrossOrigin(value = "*")
+
 public class JwtAuthenticationController {
 
     @Autowired

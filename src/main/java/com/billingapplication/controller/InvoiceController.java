@@ -23,6 +23,13 @@ public class InvoiceController {
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
+    @GetMapping("/invoice")
+    public ResponseEntity<Invoice> getInvoiceByIdRequest(@RequestParam String invoiceId) {
+        Optional<Invoice> invoice = invoiceService.getInvoiceById(invoiceId);
+        return invoice.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{invoiceId}")
     public ResponseEntity<Invoice> getInvoiceById(@PathVariable String invoiceId) {
         Optional<Invoice> invoice = invoiceService.getInvoiceById(invoiceId);
@@ -50,6 +57,4 @@ public class InvoiceController {
         invoiceService.deleteInvoice(invoiceId);
         return ResponseEntity.noContent().build();
     }
-
-    
 }

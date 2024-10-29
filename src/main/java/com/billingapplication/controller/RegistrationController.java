@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/registrations")
+@RequestMapping("/api/registration")
 public class RegistrationController {
 
     @Autowired
     private RegistrationService registrationService;
 
     
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Registration> registerUser(@RequestBody Registration registration) {
         Registration savedRegistration = registrationService.registerUser(registration);
         return ResponseEntity.ok(savedRegistration);

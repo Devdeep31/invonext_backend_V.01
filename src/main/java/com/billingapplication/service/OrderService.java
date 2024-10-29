@@ -34,11 +34,11 @@ public class OrderService {
         String orderNumber = generateOrderNumber();
         order.setOrderNumber(orderNumber);
 
-        // Validate if products exist and are valid
-        Set<Product> products = order.getProducts();
-        for (Product product : products) {
-            productService.validateProduct(product.getProductid());
-        }
+         //Validate if products exist and are valid
+//        Set<Product> products = order.getProducts();
+//        for (Product product : products) {
+//            productService.validateProduct(product.getProductid());
+//        }
 
         // Save the order to the repository
         return orderRepository.save(order);

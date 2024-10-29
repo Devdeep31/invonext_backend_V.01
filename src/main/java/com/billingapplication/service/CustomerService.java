@@ -19,15 +19,15 @@ public class CustomerService {
     }
 
     public customer saveRecords(customer cs) {
-        if (cs.getId() == null) {
-            cs.setId(generateTruncatedUUID()); 
+        if (cs.getCustomerid() == null) {
+            cs.setCustomerid(generateTruncatedUUID());
         }
         return repo.save(cs);
     }
     public List<customer> saveAllRecords(List<customer> customers) {
         for (customer cs : customers) {
-            if (cs.getId() == null) {
-                cs.setId(generateTruncatedUUID()); 
+            if (cs.getCustomerid() == null) {
+                cs.setCustomerid(generateTruncatedUUID());
             }
         }
         return repo.saveAll(customers);
@@ -47,7 +47,7 @@ public class CustomerService {
     }
 
     public customer updateCustomer(customer customer) {
-        customer editRec = repo.findById(customer.getId()).orElse(null); 
+        customer editRec = repo.findById(customer.getCustomerid()).orElse(null);
         if (editRec != null) {
             editRec.setName(customer.getName());
             editRec.setAddress(customer.getAddress());
