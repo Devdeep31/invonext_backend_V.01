@@ -28,7 +28,7 @@ public class Product {
 	private String cartQuantity;
 
 //	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "category_id", nullable = false)
+//	@JoinColumn(name = "category_id", nulslable = false)
 	private String category;
 
 }

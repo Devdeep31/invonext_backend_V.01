@@ -52,6 +52,11 @@ public class InvoiceController {
             : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/customerinvoices/{id}")
+    public ResponseEntity<List<Invoice>> invoiceByCustomer(@PathVariable String id){
+        return new ResponseEntity<>(invoiceService.getInvoiceByCustomerId(id),HttpStatus.OK);
+    }
+
     @DeleteMapping("/{invoiceId}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable String invoiceId) {
         invoiceService.deleteInvoice(invoiceId);

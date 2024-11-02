@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Use the defined CORS configuration
                     .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/api/registration/**").permitAll()
+                        .requestMatchers("/api/registration/**","/api/customer/login","/api/customer/add","/api/products/products","/api/invoices/**","/api/carts/**","/api/customer/byemail/{email}").permitAll()
 //                        .requestMatchers("/api/registration/approve/**").hasRole("ADMIN") 
                         .requestMatchers("/api/users/**").permitAll() 
                         .anyRequest().authenticated()) 

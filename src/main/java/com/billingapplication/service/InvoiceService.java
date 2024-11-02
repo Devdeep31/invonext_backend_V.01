@@ -1,12 +1,16 @@
 package com.billingapplication.service;
 
 import com.billingapplication.model.Invoice;
+import com.billingapplication.model.Product;
 import com.billingapplication.repo.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.Proxy;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class InvoiceService {
@@ -24,6 +28,16 @@ public class InvoiceService {
 
     public Invoice createInvoice(Invoice invoice) {
 
+        double totalAmount = 0.0;
+
+                    for(Product product : invoice.getProducts()){
+                        //double productQuantity = Double.parseDouble(product.getQuantity());
+                        double productPrice = Double.parseDouble(product.getPrice());
+                        double productQuantity = Double.parseDouble(product.getCartQuantity());
+                        totalAmount = totalAmount + productPrice*productQuantity;
+                    }
+                    String invoiceTotalAmount = String.valueOf(totalAmount);
+                    invoice.setTotalAmount(invoiceTotalAmount);
         return invoiceRepository.save(invoice);
     }
 
@@ -49,5 +63,9 @@ public class InvoiceService {
 
     public void deleteInvoice(String invoiceId) {
         invoiceRepository.deleteById(invoiceId);
+    }
+
+    public List<Invoice> getInvoiceByCustomerId(String id){
+        return invoiceRepository.findByCustomerCustomerid(id);
     }
 }

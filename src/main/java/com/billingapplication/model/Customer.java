@@ -8,15 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class customer {
+public class Customer {
 
 	@Id
 	@Column(name = "id", updatable = false, nullable = false)
@@ -28,8 +26,11 @@ public class customer {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    private String password;
+
+
     private String phonenumber;
+    private Boolean isAuthenticated = false;
 
 //    @Column(unique = true, nullable = false)
 //    private String customerid;

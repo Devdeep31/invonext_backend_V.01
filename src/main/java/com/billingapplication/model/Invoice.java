@@ -19,7 +19,7 @@ public class Invoice {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", nullable = false)
-    private customer customer;
+    private Customer customer;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -31,6 +31,7 @@ public class Invoice {
 
 
     private String paymentName;
+    private String email;
     private String paymentNum;
     private String address;
     private String gstin;
@@ -38,8 +39,10 @@ public class Invoice {
     private String billDate;
     private String termDueDate;
     private String customerphonenumber;
-    private double totalAmount;
+    private String totalAmount;
     private String totalAmountInWord;
+    private String billMode; //Offline or online
+    private String paymentMode; //COD or online
 
     // Default constructor
 //    public Invoice() {

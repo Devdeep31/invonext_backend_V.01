@@ -1,14 +1,14 @@
 package com.billingapplication.controller;
 
-import java.util.List;
-
+import com.billingapplication.dto.AuthenticateCustomer;
+import com.billingapplication.model.Customer;
+import com.billingapplication.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.billingapplication.model.customer;
-import com.billingapplication.service.CustomerService;
+import java.util.List;
 
 @RestController
 @CrossOrigin(value = "*")
@@ -20,20 +20,20 @@ public class CustomerController {
     private CustomerService service;
 
     @PostMapping("/add")
-    public ResponseEntity<customer> addCustomer(@RequestBody customer customer) {
-        customer savedCustomer = service.saveRecords(customer);
+    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+        Customer savedCustomer = service.saveRecords(customer);
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
 
     @PostMapping("/multicust")
-    public ResponseEntity<List<customer>> addMultipleCustomers(@RequestBody List<customer> customers) {
-        List<customer> savedCustomers = service.saveAllRecords(customers);
+    public ResponseEntity<List<Customer>> addMultipleCustomers(@RequestBody List<Customer> customers) {
+        List<Customer> savedCustomers = service.saveAllRecords(customers);
         return new ResponseEntity<>(savedCustomers, HttpStatus.CREATED);
     }
 
     @GetMapping("/customers")
-    public ResponseEntity<List<customer>> findAllCustomers() {
-        List<customer> customers = service.getrecords();
+    public ResponseEntity<List<Customer>> findAllCustomers() {
+        List<Customer> customers = service.getrecords();
         if (customers.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -41,8 +41,8 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerid}")
-    public ResponseEntity<customer> findCustomerByCustomerId(@PathVariable String customerid) {
-        customer customer = service.getCustomerById(customerid);
+    public ResponseEntity<Customer> findCustomerByCustomerId(@PathVariable String customerid) {
+        Customer customer = service.getCustomerById(customerid);
         if (customer != null) {
             return new ResponseEntity<>(customer, HttpStatus.OK);
         }
@@ -50,8 +50,8 @@ public class CustomerController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<customer> updateCustomer(@RequestBody customer customer) {
-        customer updatedCustomer = service.updateCustomer(customer);
+    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) {
+        Customer updatedCustomer = service.updateCustomer(customer);
         if (updatedCustomer != null) {
             return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
         }
@@ -67,4 +67,21 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Customer> customerLogin(@RequestBody AuthenticateCustomer authenticateCustomer) {
+        Customer customer = service.authenticateCustomer(authenticateCustomer);
+
+        if (customer != null) {
+            return new ResponseEntity<>(customer, HttpStatus.ACCEPTED); // Successfully authenticated
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Authentication failed
+        }
+    }
+
+    @GetMapping("/byemail/{email}")
+    public ResponseEntity<Customer> findByEmail(@PathVariable String email){
+        return new ResponseEntity<>(service.findByEmail(email),HttpStatus.OK);
+    }
+
 }
