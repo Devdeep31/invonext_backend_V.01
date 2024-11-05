@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, String> {
     List<Invoice> findByCustomerCustomerid(String customerId);
+    List<Invoice> findByEmail(String email);
 }

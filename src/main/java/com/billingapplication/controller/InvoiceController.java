@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,16 @@ public class InvoiceController {
     @GetMapping("/customerinvoices/{id}")
     public ResponseEntity<List<Invoice>> invoiceByCustomer(@PathVariable String id){
         return new ResponseEntity<>(invoiceService.getInvoiceByCustomerId(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/customerinvoicesbyEmail/{email}")
+    public ResponseEntity<List<Invoice>> invoicesByCustEmail(@PathVariable String email){
+        List<Invoice> invoices = invoiceService.getInvoicesByEmail(email);
+
+        if(!invoices.isEmpty()){
+            return new ResponseEntity<>(invoices,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{invoiceId}")

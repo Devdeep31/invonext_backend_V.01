@@ -68,4 +68,11 @@ public class InvoiceService {
     public List<Invoice> getInvoiceByCustomerId(String id){
         return invoiceRepository.findByCustomerCustomerid(id);
     }
+
+    public List<Invoice> getInvoicesByEmail(String email){
+        if(!invoiceRepository.findByEmail(email).isEmpty()){
+           return invoiceRepository.findByEmail(email);
+        }
+        return null;
+    }
 }
