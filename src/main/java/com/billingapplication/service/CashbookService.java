@@ -1,5 +1,6 @@
 package com.billingapplication.service;
 
+import com.billingapplication.dto.CashbookData;
 import com.billingapplication.model.Cashbook;
 import com.billingapplication.model.MasterBalance;
 import com.billingapplication.model.User;
@@ -76,5 +77,12 @@ public class CashbookService {
             return cashbookRepository.save(existingCb);
         }
         return null;
+    }
+
+    public CashbookData cashbookData(){
+        CashbookData cashbookData = new CashbookData();
+        cashbookData.setTotalIn(cashbookRepository.getTotalIn());
+        cashbookData.setTotalOut(cashbookRepository.getTotalOut());
+        return cashbookData;
     }
 }

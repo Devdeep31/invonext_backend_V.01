@@ -1,5 +1,6 @@
 package com.billingapplication.controller;
 
+import com.billingapplication.dto.InvoiceData;
 import com.billingapplication.model.Invoice;
 import com.billingapplication.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,10 @@ public class InvoiceController {
     public ResponseEntity<Void> deleteInvoice(@PathVariable String invoiceId) {
         invoiceService.deleteInvoice(invoiceId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/data")
+    public ResponseEntity<InvoiceData> getInvoiceData(){
+        return new ResponseEntity<>(invoiceService.invoiceData(),HttpStatus.OK);
     }
 }

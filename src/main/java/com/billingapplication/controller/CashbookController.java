@@ -1,5 +1,6 @@
 package com.billingapplication.controller;
 
+import com.billingapplication.dto.CashbookData;
 import com.billingapplication.model.Cashbook;
 import com.billingapplication.service.CashbookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,11 @@ public class CashbookController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    //Get Cashbook data
+    @GetMapping("/data")
+    public ResponseEntity<CashbookData> cashbookData(){
+        return new ResponseEntity<>(service.cashbookData(),HttpStatus.OK);
     }
 }

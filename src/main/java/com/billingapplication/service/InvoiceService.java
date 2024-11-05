@@ -1,5 +1,6 @@
 package com.billingapplication.service;
 
+import com.billingapplication.dto.InvoiceData;
 import com.billingapplication.model.Invoice;
 import com.billingapplication.model.Product;
 import com.billingapplication.repo.InvoiceRepository;
@@ -74,5 +75,13 @@ public class InvoiceService {
            return invoiceRepository.findByEmail(email);
         }
         return null;
+    }
+
+    public InvoiceData invoiceData(){
+        InvoiceData invoiceData = new InvoiceData();
+        invoiceData.setTotalInvoices(invoiceRepository.getTotalInvoices());
+        invoiceData.setTotalCompletedInvoices(invoiceRepository.getTotalCompleteInvoices());
+        invoiceData.setTotalPendingInvoices(invoiceRepository.getTotalPendingInvoices());
+        return invoiceData;
     }
 }

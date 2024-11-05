@@ -43,6 +43,7 @@ public class Invoice {
     private String totalAmountInWord;
     private String billMode; //Offline or online
     private String paymentMode; //COD or online
+    private String status; //pending completed
 
     // Default constructor
 //    public Invoice() {
