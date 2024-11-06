@@ -1,6 +1,8 @@
 package com.billingapplication.model;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.Set;
 import com.billingapplication.util.IDGenerator;
 import lombok.*;
@@ -34,6 +36,11 @@ public class Invoice {
     private String email;
     private String paymentNum;
     private String address;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cart> cartItems;
+
+
     private String gstin;
     private String billNum;
     private String billDate;
@@ -44,6 +51,8 @@ public class Invoice {
     private String billMode; //Offline or online
     private String paymentMode; //COD or online
     private String status; //pending completed
+
+
 
     // Default constructor
 //    public Invoice() {

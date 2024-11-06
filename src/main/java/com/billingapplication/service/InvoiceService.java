@@ -31,16 +31,25 @@ public class InvoiceService {
 
         double totalAmount = 0.0;
 
-                    for(Product product : invoice.getProducts()){
-                        //double productQuantity = Double.parseDouble(product.getQuantity());
-                        double productPrice = Double.parseDouble(product.getPrice());
-                        double productQuantity = Double.parseDouble(product.getCartQuantity());
-                        totalAmount = totalAmount + productPrice*productQuantity;
-                    }
-                    String invoiceTotalAmount = String.valueOf(totalAmount);
-                    invoice.setTotalAmount(invoiceTotalAmount);
+        for (Product product : invoice.getProducts()) {
+            if (product.getPrice() != null && product.getCartQuantity() != null) {
+                try {
+                    double productPrice = Double.parseDouble(product.getPrice().trim());
+                    double productQuantity = Double.parseDouble(product.getCartQuantity().trim());
+
+
+                    totalAmount += productPrice * productQuantity;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number format in product price or quantity. Skipping this product.");
+                }
+            } else {
+                System.out.println("Product price or quantity is null. Skipping this product.");
+            }
+        }
+        invoice.setTotalAmount(String.valueOf(totalAmount));
         return invoiceRepository.save(invoice);
     }
+
 
     public Invoice updateInvoice(String invoiceId, Invoice updatedInvoice) {
         Optional<Invoice> existingInvoiceOpt = invoiceRepository.findById(invoiceId);

@@ -28,6 +28,10 @@ public class Cart {
 //	@JoinColumn(name = "category_id", nulslable = false)
     private String category;
 
+    @ManyToOne
+    @JoinColumn(name = "invoice_id") // Foreign key column in Cart table
+    private Invoice invoice;
+
 
 
 }
